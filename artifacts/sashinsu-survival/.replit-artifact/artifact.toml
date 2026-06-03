@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "사신수 서바이벌"
+version = "1.0.0"
+id = "artifacts/sashinsu-survival"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21914
+
+[services.development]
+run = "pnpm --filter @workspace/sashinsu-survival run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sashinsu-survival", "run", "build" ]
+publicDir = "artifacts/sashinsu-survival/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21914"
+BASE_PATH = "/"
