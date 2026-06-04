@@ -4,14 +4,20 @@ import { updateWeapons, WEAPON_DEFS } from './weapons';
 import { updateEffects, drawEffects } from './effects';
 import { BUFF_DEFS, getPlayerSpeedMultiplier } from './buffs';
 
+// 기본 무기 목록
+const BASE_WEAPONS = ['뇌명의 창', '세계수의 나뭇가지', '공허한 화령의 그릇', '만파식적'];
+
 export function createInitialState(canvasWidth: number, canvasHeight: number): GameState {
+  // 기본 무기 중 하나를 무작위로 선택
+  const randomBaseWeapon = BASE_WEAPONS[Math.floor(Math.random() * BASE_WEAPONS.length)];
+  
   return {
     player: {
       pos: { x: 0, y: 0 },
       dir: { x: 1, y: 0 },
       hp: 100, maxHp: 100,
       speed: 150, radius: 15,
-      weapons: [],
+      weapons: [randomBaseWeapon],
       buffs: [],
       level: 1, exp: 0, expToNext: 10
     },
