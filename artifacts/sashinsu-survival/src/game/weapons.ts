@@ -1,5 +1,6 @@
 import { GameState } from './types';
 import { addEffect } from './effects';
+import { getKnockbackMultiplier } from './enemies';
 
 export const WEAPON_DEFS: Record<string, {
   id: string; name: string; description: string;
@@ -190,9 +191,10 @@ export function updateWeapons(state: GameState, dt: number) {
         const dy = e.pos.y - player.pos.y;
         const dist = Math.hypot(dx, dy);
         if (dist < pushRadius && dist > 0) {
+          const kbMult = getKnockbackMultiplier(e);
           e.hp -= 20 * mult;
-          e.knockback.x += (dx / dist) * pushForce * mult;
-          e.knockback.y += (dy / dist) * pushForce * mult;
+          e.knockback.x += (dx / dist) * pushForce * mult * kbMult;
+          e.knockback.y += (dy / dist) * pushForce * mult * kbMult;
           hit.push({ e, nx: dx / dist, ny: dy / dist });
         }
       }

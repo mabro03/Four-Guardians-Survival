@@ -113,6 +113,47 @@ export function drawEffects(state: GameState, ctx: CanvasRenderingContext2D) {
       ctx.beginPath();
       ctx.arc(eff.pos.x, eff.pos.y, eff.size, 0, Math.PI * 2);
       ctx.fill();
+
+    } else if (eff.type === 'hit_burst') {
+      const radius = eff.size * (1 + (1 - t) * 1.5);
+      ctx.strokeStyle = eff.color;
+      ctx.lineWidth = 4 * t;
+      ctx.shadowColor = eff.color;
+      ctx.shadowBlur = 24;
+      ctx.beginPath();
+      ctx.arc(eff.pos.x, eff.pos.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = eff.color + '44';
+      ctx.beginPath();
+      ctx.arc(eff.pos.x, eff.pos.y, radius * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+
+    } else if (eff.type === 'exp_text') {
+      ctx.fillStyle = eff.color;
+      ctx.font = `bold ${eff.size}px sans-serif`;
+      ctx.textAlign = 'center';
+      const rise = (1 - t) * 50;
+      ctx.shadowColor = eff.color;
+      ctx.shadowBlur = 12;
+      ctx.fillText(eff.text || '', eff.pos.x, eff.pos.y - rise);
+
+    } else if (eff.type === 'exp_burst') {
+      const radius = eff.size * (0.5 + (1 - t) * 1.2);
+      const grad = ctx.createRadialGradient(eff.pos.x, eff.pos.y, 0, eff.pos.x, eff.pos.y, radius);
+      grad.addColorStop(0, eff.color + 'cc');
+      grad.addColorStop(0.5, eff.color + '66');
+      grad.addColorStop(1, eff.color + '00');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(eff.pos.x, eff.pos.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = eff.color;
+      ctx.lineWidth = 2 * t;
+      ctx.shadowColor = eff.color;
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.arc(eff.pos.x, eff.pos.y, radius * 0.7, 0, Math.PI * 2);
+      ctx.stroke();
     }
 
     ctx.restore();

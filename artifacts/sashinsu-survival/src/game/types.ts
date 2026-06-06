@@ -1,5 +1,18 @@
 export type Vector2 = { x: number; y: number };
 
+export type Difficulty = 'easy' | 'normal' | 'hard' | 'hardcore';
+
+export const DIFFICULTY_CONFIG: { id: Difficulty; label: string; hp: number }[] = [
+  { id: 'easy', label: '쉬움', hp: 100 },
+  { id: 'normal', label: '보통', hp: 50 },
+  { id: 'hard', label: '어려움', hp: 10 },
+  { id: 'hardcore', label: '하드코어', hp: 1 },
+];
+
+export function getDifficultyHp(difficulty: Difficulty): number {
+  return DIFFICULTY_CONFIG.find(d => d.id === difficulty)?.hp ?? 50;
+}
+
 export interface Player {
   pos: Vector2;
   dir: Vector2; // Last movement direction
@@ -12,6 +25,7 @@ export interface Player {
   level: number;
   exp: number;
   expToNext: number;
+  invincibleTimer: number;
 }
 
 export interface Enemy {
@@ -29,6 +43,7 @@ export interface Enemy {
   burnStacks: number;
   burnTimer: number;
   slowTimer: number;
+  knockbackResist: number;
 }
 
 export interface Projectile {
@@ -67,6 +82,14 @@ export interface VisualEffect {
   text?: string;
 }
 
+export interface PickupItem {
+  id: number;
+  pos: Vector2;
+  type: 'magnet' | 'heal';
+  radius: number;
+  color: string;
+}
+
 export interface Upgrade {
   id: string;
   name: string;
@@ -81,11 +104,12 @@ export interface GameState {
   enemies: Enemy[];
   projectiles: Projectile[];
   expOrbs: ExpOrb[];
+  pickups: PickupItem[];
   effects: VisualEffect[];
   camera: Vector2;
   time: number; 
   kills: number;
-  state: 'START' | 'PLAYING' | 'LEVEL_UP' | 'GAME_OVER';
+  state: 'START' | 'PLAYING' | 'PAUSED' | 'LEVEL_UP' | 'GAME_OVER';
   keys: { [key: string]: boolean };
   upgradesToChoose: Upgrade[];
   lastTime: number;
@@ -93,4 +117,10 @@ export interface GameState {
   ctx: CanvasRenderingContext2D | null;
   canvasWidth: number;
   canvasHeight: number;
+  hitFlashTimer: number;
+  screenShake: number;
+  expPulseTimer: number;
+  hudVersion: number;
+  difficulty: Difficulty;
+  magnetTimer: number;
 }
